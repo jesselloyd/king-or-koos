@@ -6,20 +6,19 @@ An application for playing the card game King or Koos with your friends.
 
 The game consists of a series of rounds. Each round has a series of turns. The number of rounds and turns vary depending on the number of players, the number of decks used, and the way players are taking their turns.
 
-#### Rank
+### Rank
 
 Card values are ranked from lowest to highest as shown:
 
-**4, 5, 6, 7, 8, 9, 10, J, K, Q, A, 2, 3**
+**4, 5, 6, 7, 8, 9, 10, J, Q, K, A, 2, 3**
 
-#### Objective
+### Objective
 
 The winner is the first player to get rid of all their cards. This player is the **King**.
 
 The loser is the last player to get rid of all their cards. This player is the **Koos**.
 
-
-#### Setup
+### Setup
 
 Any number of decks can be used and any number of players can play. Only a card's numeric value is relevant.
 
@@ -27,8 +26,7 @@ The deck(s) will be shuffled and dealt evenly to all players.
 
 The starting player is the first player who indicates they have the 4 of ♠️ (Spades). Remember, if multiple decks are used, there will be multiple 4 of ♠️ (Spades) cards. The first player to indicate they have the card is the one who goes first. **(feature not yet implemented)**
 
-
-#### Rounds
+### Rounds
 
 A round is represented by a pile of cards that a player can add to during their turn. At the start of a round, the pile is empty.
 
@@ -37,7 +35,7 @@ A round is started by a player taking their turn and ends when either:
 * The card with the highest value is on the top of the pile (3)
 * The next player was the last player whose turn resulted in adding cards to the pile. This means all other players were not able to add cards to the pile.
 
-#### Turn
+### Turn
 
 A turn is represented by a set of cards, each of which **must have the same value**. The card's suit does not matter. A player can skip their turn if they do not have any cards that can be added to the round's pile. 
 
