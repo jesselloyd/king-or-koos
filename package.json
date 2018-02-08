@@ -1,0 +1,22 @@
+{
+  "name": "king-or-koos",
+  "version": "0.0.1",
+  "description": "An application for playing the game King or Koos with your friends.",
+  "main": "index.js",
+  "repository": "https://github.com/jesselloyd/king-or-koos.git",
+  "author": "Jesse Lloyd <jesselloyd@charter.net>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "play": "node .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.7"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^22.1.4"
+  }
+}
