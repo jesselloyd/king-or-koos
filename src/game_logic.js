@@ -10,11 +10,12 @@ const RoundPileItem = require('./round_pile_item');
  */
 function printRoundPile(roundPile) {
   if (roundPile.length) {
-    process.stdout.write('♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️️ ♥️ ♣️ ♦️\n\n');
-    roundPile[roundPile.length - 1].cards.forEach(c => process.stdout.write(`${c.displayName} `));
-    process.stdout.write('\n\n♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️\n');
+    console.log('♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️️ ♥️ ♣️ ♦️');
+    roundPile[roundPile.length - 1].cards.forEach(c =>
+      process.stdout.write(`${c.displayName} `));
+    console.log('\n\n♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️ ♠️ ♥️ ♣️ ♦️');
   } else {
-    process.stdout.write('Pile for this round was empty.\n');
+    console.log('Pile for this round was empty.\n');
   }
 }
 
@@ -97,8 +98,8 @@ function getCardsFromInput(input) {
       .split('')
       .findIndex(c =>
         c !== '1' &&
-        c !== '0' &&
-        CARD_CONSTANTS.CARD_TO_VALUE_MAP[c] === undefined);
+          c !== '0' &&
+          CARD_CONSTANTS.CARD_TO_VALUE_MAP[c] === undefined);
     const selectedValue = input.slice(0, firstIndexOfNonSuitValue);
     const cardReferences = input.slice(firstIndexOfNonSuitValue, input.length);
     cardReferences.split(',').forEach((ref) => {
@@ -134,11 +135,12 @@ function getCardsToPlay(player, numberOfCardsPerTurn) {
     const playIsValid =
       cards &&
       ((numberOfCardsPerTurn && cards.length === numberOfCardsPerTurn) ||
-      (!numberOfCardsPerTurn && cards.length > 0 &&
-       cards.length <= numberOfCardsThatCanBePlayed)
-      ) && player.cardsAreInHand(cards);
+        (!numberOfCardsPerTurn &&
+          cards.length > 0 &&
+          cards.length <= numberOfCardsThatCanBePlayed)) &&
+      player.cardsAreInHand(cards);
     if (!playIsValid) {
-      process.stdout.write('Your play was not valid. Either you chose cards not in your hand or the wrong number of cards for this round. Please try again.\n');
+      console.log('Your play was not valid. Either you chose cards not in your hand or the wrong number of cards for this round. Please try again.\n');
       return getCardsToPlay(player, numberOfCardsPerTurn);
     }
   }
@@ -174,7 +176,7 @@ function takeTurn(player, roundPile) {
         roundPile.push(new RoundPileItem(cards, player.name));
       }
     } else {
-      process.stdout.write("You can't place down that hand. You have to try again! " +
+      console.log("You can't place down that hand. You have to try again! " +
           "If you don't have any cards you can play, skip your turn!\n");
       takeTurn(player, roundPile);
     }
@@ -226,10 +228,34 @@ function tryContinueRound(roundPile, player) {
   if (roundPile && roundPile.length) {
     printRoundPile(roundPile);
     return !(
-      isTopCardFound(roundPile) || lastCardPlayedBy(roundPile) === player.name
+      isTopCardFound(roundPile) ||
+      lastCardPlayedBy(roundPile) === player.name ||
+      player.hand.length === 0
     );
   }
   return true;
+}
+
+/**
+ * Reorders a list of players so that the first player in the list
+ * holds the defined starting card. For example, if the starting card is
+ * 4 of ♠️, then the player with that card will go first and the players
+ * will be chosen as normal in a circular fashion.
+ * @param {Player[]} players
+ */
+function reorderPlayers(players) {
+  let orderedPlayers = players;
+  const playerWithStartingCard = players.find(p =>
+    p.hand.some(c =>
+      c.cardValue === CARD_CONSTANTS.STARTING_VALUE &&
+      c.suit === CARD_CONSTANTS.STARTING_SUIT));
+  const playerIndex = players.indexOf(playerWithStartingCard);
+  if (players[playerIndex]) {
+    const playersToPushToEnd = players.slice(0, playerIndex);
+    const playersToStartFrom = players.slice(playerIndex, players.length);
+    orderedPlayers = playersToStartFrom.concat(playersToPushToEnd);
+  }
+  return orderedPlayers;
 }
 
 module.exports = {
@@ -244,4 +270,5 @@ module.exports = {
   isTopCardFound,
   lastCardPlayedBy,
   tryContinueRound,
+  reorderPlayers,
 };

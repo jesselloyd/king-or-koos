@@ -1,6 +1,8 @@
 module.exports = {
   DECK_SIZE: 52,
   TOP_CARD: 12,
+  STARTING_VALUE: 4,
+  STARTING_SUIT: 'Clubs',
   VALUE_TO_CARD_MAP: {
     0: 4,
     1: 5,

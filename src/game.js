@@ -14,27 +14,30 @@ class Game {
       const deck = new Deck();
       const finishedPlayers = [];
       deck.deal(players);
+      players = gl.reorderPlayers(players);
       let player = players[0];
 
-      while (players.length) {
+      while (players.length > 1) {
         const roundPile = [];
         while (gl.tryContinueRound(roundPile, player)) {
           gl.takeTurn(player, roundPile);
-          player = this.getNextPlayer(players, player);
+          if (player.hand.length &&
+              !gl.isTopCardFound(roundPile) &&
+              player !== gl.lastCardPlayedBy(roundPile)) {
+            player = this.getNextPlayer(players, player);
+          }
         }
-        process.stdout.write('ROUND OVER!');
-        const previousPlayer = this.getPreviousPlayer(players, player);
-        if (!previousPlayer.hand.length) {
-          process.stdout.write('Winner set -> ', previousPlayer.name);
-          this.setWinner(previousPlayer, players, finishedPlayers);
-        } else {
-          player = previousPlayer;
+        console.log('ROUND OVER!');
+        if (!player.hand.length) {
+          const nextPlayer = this.getNextPlayer(players, player);
+          this.setWinner(player, players, finishedPlayers);
+          player = nextPlayer;
         }
       }
 
       return {
         king: finishedPlayers[0],
-        koos: finishedPlayers[finishedPlayers.length - 1],
+        koos: players[0],
       };
     }
     throw Error('No players were found. Cannot play the game without any players.');
@@ -49,12 +52,12 @@ class Game {
    */
   setWinner(player, players, finishedPlayers) {
     const playerIndex = players.indexOf(player);
-
     if (players[playerIndex]) {
       finishedPlayers.push(players[playerIndex]);
       players.splice(playerIndex, 1);
+    } else {
+      throw Error(`Player ${player} in ${this} was not in the list of active players. Cannot set them as a winner.`);
     }
-    throw Error(`Player ${player} in ${this} was not in the list of active players. Cannot set them as a winner.`);
   }
 
   /**
@@ -69,24 +72,7 @@ class Game {
     if (players[playerIndex]) {
       return players[(playerIndex + 1) % players.length];
     }
-    throw Error(`Player ${player} in ${this} was not in the list of players. Cannot determine the next player.`);
-  }
-
-  /**
-   * Gets the previous player from a circular list of players.
-   * @param {Player[]} players
-   * @param {Player} player
-   * @returns {Player}
-   */
-  getPreviousPlayer(players, player) {
-    const playerIndex = players.indexOf(player);
-
-    if (players[playerIndex]) {
-      const numOfPlayers = players.length;
-      if (playerIndex === 0) return players[numOfPlayers - 1];
-      return players[(playerIndex - 1) % numOfPlayers];
-    }
-    throw Error(`Player ${player} in ${this} was not in the list of players. Cannot determine the previous player.`);
+    return players[0];
   }
 }
 

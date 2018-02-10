@@ -23,7 +23,7 @@ class Player {
    * @param {Card[]} hand
    */
   sortHand() {
-    this.hand.sort((cardOne, cardTwo) => cardOne.value > cardTwo.value);
+    this.hand.sort((cardOne, cardTwo) => (cardOne.value > cardTwo.value ? 1 : -1));
   }
 
   /**

@@ -24,8 +24,8 @@ class Deck {
     players.forEach((player) => {
       for (let i = 0; i < cardsPerPlayer; i += 1) {
         player.hand.push(deck.pop());
-        player.sortHand();
       }
+      player.sortHand();
     });
   }
 
