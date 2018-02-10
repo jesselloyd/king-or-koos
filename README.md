@@ -24,7 +24,7 @@ Any number of decks can be used and any number of players can play. Only a card'
 
 The deck(s) will be shuffled and dealt evenly to all players.
 
-The starting player is the first player who indicates they have the 4 of ♠️ (Spades). Remember, if multiple decks are used, there will be multiple 4 of ♠️ (Spades) cards. The first player to indicate they have the card is the one who goes first. **(feature not yet implemented)**
+The starting player is the first player who indicates they have the 4 of ♠️ (Spades). Remember, if multiple decks are used, there will be multiple 4 of ♠️ (Spades) cards. The first player to indicate they have the card is the one who goes first.
 
 ### Rounds
 
